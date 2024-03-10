@@ -1,7 +1,12 @@
 import telebot
 from telebot import types
+import os
+from dotenv import load_dotenv
 
-bot = telebot.TeleBot("7099603513:AAHuuWG68xDpVC6Th0T-Oz_5bpH4WwotPDE")
+load_dotenv()
+
+token = os.getenv('TOKEN')
+bot = telebot.TeleBot(token)
 
 command_help = types.BotCommand(command='help', 
 								   		description='список возможностей бота')

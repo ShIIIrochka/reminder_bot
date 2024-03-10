@@ -1,1 +1,4 @@
-пше
+*lock
+pycache/
+dist/
+.env
