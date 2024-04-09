@@ -10,13 +10,14 @@ def handle_help(message):
 
 @bot.message_handler(commands=['newrem'])
 def handle_newrem(message):
-    from commands.newrem import new_reminder, callback_worker
+    from commands.newrem import new_reminder
     new_reminder(message)
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     from commands.newrem import callback_worker
     callback_worker(call)
+
 
 @bot.message_handler(content_types=['text'])
 def not_command(message):
