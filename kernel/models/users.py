@@ -1,26 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from typing import List
-from typing import Optional
-from sqlalchemy import ForeignKey
-from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
-class Base(DeclarativeBase):
-    pass
+
+Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'users'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    telegram_id: Mapped[int]
+    id = Column(Integer, primary_key=True, nullable=False)
+    telegram_id = Column(Integer, unique=True, nullable=False)
 
+    reminders = relationship("Reminders")
 class Reminders(Base):
     __tablename__ =  'reminders'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    description: Mapped[Optional[str]] = mapped_column(String(150))
-    owner_id: Mapped[int] 
+    id = Column(Integer, primary_key=True, nullable=False)
+    description = Column(String)
+    owner_id = Column(Integer, nullable=False, ForeignKey('User.id'))
+    date = Column(DateTime, nullable=False)
+
