@@ -1,0 +1,17 @@
+Project Reminder_bot {
+    database_type: 'SQLite'
+}
+
+Table users {
+    id integer [pk, not null, increment]
+    telegram_id integer [not null, unique]
+}
+
+Table reminders {
+    id integer [pk, not null, increment]
+    description text
+    owner_id integer [not null]
+    date timestamp [not null]
+}
+Ref: reminders.owner_id - users.id
+Ref: reminders.id > users.id
