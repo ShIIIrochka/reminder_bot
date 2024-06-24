@@ -11,7 +11,7 @@ Table reminders {
     id integer [pk, not null, increment]
     description text
     owner_id integer [not null]
-    date date [not null]
-    time timestamp [not null]
+    date timestamp [not null]
 }
-Ref: reminders.owner_id - users.telegram_id
+Ref: reminders.owner_id - users.id
+Ref: reminders.id > users.id
