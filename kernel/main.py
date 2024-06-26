@@ -1,7 +1,7 @@
 import telebot
 from constants import bot
 
-from commands.newrem import new_reminder
+from commands.newrem import  newrem_command
 from commands.newrem import callback_worker
 from commands.newrem import report
 
@@ -20,7 +20,7 @@ def not_command(message):
 
 @bot.message_handler(commands=['newrem'])
 def handle_newrem(message):
-    new_reminder(message)
+    newrem_command(message)
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
