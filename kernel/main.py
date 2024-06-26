@@ -18,7 +18,6 @@ def handle_help(message):
 def not_command(message):
     send_list_of_commands(message)
 
-@bot.message_handler(commands=['newrem'])
 def handle_newrem(message):
     newrem_command(message)
 
