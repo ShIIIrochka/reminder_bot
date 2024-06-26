@@ -1,4 +1,3 @@
-*lock
-pycache/
-dist/
+# *lock
+__pycache__/
 .env

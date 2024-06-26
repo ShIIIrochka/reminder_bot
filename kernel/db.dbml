@@ -13,5 +13,5 @@ Table reminders {
     owner_id integer [not null]
     date timestamp [not null]
 }
-Ref: reminders.owner_id - users.id
-Ref: reminders.id > users.id
+
+Ref: reminders.owner_id > users.id

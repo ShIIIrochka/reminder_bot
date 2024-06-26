@@ -10,6 +10,7 @@ python = "^3.11"
 pytelegrambotapi = "^4.16.1"
 python-dotenv = "^1.0.1"
 sqlalchemy = "^2.0.31"
+alembic = "^1.13.1"
 
 
 [build-system]
