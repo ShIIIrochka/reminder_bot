@@ -3,8 +3,8 @@
 import telebot
 
 from constants import bot
-from ..models import User
-from ..models.users import session
+from models import User
+from models.users import session
 
 @bot.message_handler(commands = ['start'])
 def start_(message):

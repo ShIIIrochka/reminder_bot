@@ -3,7 +3,7 @@
 import telebot
 
 from constants import bot
-from kernel.commands.start import start_
+from commands.start import start_
 
 @bot.message_handler(commands=['start'])
 def start(message):

@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
-from ..services import engine
+from services import engine
 
 
 Base = declarative_base()
@@ -23,8 +23,8 @@ class Reminder(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(Text(50))
     description = Column(Text)
-    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    date = Column(DateTime, nullable=False)
+    owner_id = Column(Integer, ForeignKey('users.id'))
+    date = Column(DateTime)
     
     owner = relationship("User", back_populates="reminders")
 

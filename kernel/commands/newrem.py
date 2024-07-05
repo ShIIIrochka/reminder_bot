@@ -6,6 +6,8 @@ import threading
 from datetime import datetime
 
 from constants import bot
+from models import Reminder
+from models.users import session
 
 class NewReminder():
     ''' класс для записи нового напоминания '''
@@ -19,12 +21,24 @@ class NewReminder():
         ''' функция для обработки последующих функций '''
 
         bot.send_message(self.chat_id, "Введите название напоминания:")
-        bot.register_next_step_handler(message, process_name_step)
+        bot.register_next_step_handler(message, self.process_name_step)
 
     def process_name_step(self, message):
         ''' функция для обработки названия напоминания'''
 
-        name:str = message.text
-        self.user_data[name] = name
+        name = message.text
+        title = Reminder(name=name)
+        session.add(title)
+        session.commit()
+
         bot.send_message(self.chat_id, "Введите описание напоминания:")
-        bot.register_next_step_handler(message, process_description_step)
+        bot.register_next_step_handler(message, self.process_description_step)
+
+    def process_description_step(self, message):
+        '''функция для обработки описания напоминания'''
+
+        description = Reminder(description = message.text)
+        session.add(description)
+        session.commit()
+
+        bot.send_message(self.chat_id, "Введите дату напоминания в формате YYYY-MM-DD HH:MM")
