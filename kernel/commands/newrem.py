@@ -26,10 +26,7 @@ class NewReminder():
     def process_name_step(self, message):
         ''' функция для обработки названия напоминания'''
 
-        name = message.text
-        title = Reminder(name=name)
-        session.add(title)
-        session.commit()
+        self.user_data['name'] = message.text
 
         bot.send_message(self.chat_id, "Введите описание напоминания:")
         bot.register_next_step_handler(message, self.process_description_step)
@@ -37,8 +34,6 @@ class NewReminder():
     def process_description_step(self, message):
         '''функция для обработки описания напоминания'''
 
-        description = Reminder(description = message.text)
-        session.add(description)
-        session.commit()
+        self.user_data['description'] = message.text
 
         bot.send_message(self.chat_id, "Введите дату напоминания в формате YYYY-MM-DD HH:MM")
