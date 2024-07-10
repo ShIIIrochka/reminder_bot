@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
-from services import engine
+from services.engine_service import engine
 
 
 Base = declarative_base()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from commands.start import start_
-from commands.newrem import newrem_command
+from services.start import start_
+from services.newrem import newrem_command
 from constants import bot
 
 
