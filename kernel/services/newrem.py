@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from threading import Timer
 from datetime import datetime
 
 from constants import bot
@@ -71,4 +72,13 @@ def process_date_step(message):
             "Некорректный формат даты.\
             Пожалуйста, введите дату и время форматe\
             'YYYY-MM-DD HH:MM'"
+        )
+
+
+def send_reminder(message, Reminder: Reminder):
+        bot.send_message(
+            message.chat.id,
+            f"Напоминание: {Reminder.name}\n\
+            Описание: {Reminder.description}\n\
+            Дата: {Reminder.date}"
         )
