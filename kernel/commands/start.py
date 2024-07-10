@@ -8,7 +8,8 @@ from models.users import session
 @bot.message_handler(commands=['start'])
 def start_(message):
     telegram_id = message.from_user.id
-    result = session.query(User).filter(User.telegram_id == telegram_id).count()
+    result = session.query(User).filter(
+        User.telegram_id == telegram_id).count()
     if result > 0:
         pass
     else:
