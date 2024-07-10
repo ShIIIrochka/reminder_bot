@@ -32,13 +32,15 @@ def process_description_step(message):
 
     user_data['description'] = message.text
 
-    bot.send_message(message.chat.id, "Введите дату напоминания в формате YYYY-MM-DD HH:MM")
+    bot.send_message(
+        message.chat.id,
+        "Введите дату напоминания в форматe YYYY-MM-DD HH:MM")
     bot.register_next_step_handler(message, process_date_step)
 
 
 def process_date_step(message):
     '''функция для обработки даты напоминания'''
-    
+
     date_str = message.text
     try:
         reminder_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
@@ -66,5 +68,7 @@ def process_date_step(message):
     except ValueError:
         bot.send_message(
             message.chat.id,
-            "Некорректный формат даты. Пожалуйста, введите дату и время в формате 'YYYY-MM-DD HH:MM':"
+            "Некорректный формат даты.\
+            Пожалуйста, введите дату и время форматe\
+            'YYYY-MM-DD HH:MM'"
         )
