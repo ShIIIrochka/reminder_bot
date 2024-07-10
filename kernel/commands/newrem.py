@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import telebot
-from telebot import TeleBot
-from telebot import types
-import threading
 from datetime import datetime
 
 from constants import bot
 from models import Reminder, User
 from models.users import session
 
+
 user_data = {}
+
 
 @bot.message_handler(commands=['newrem'])
 def newrem_command(message):
@@ -53,7 +51,6 @@ def process_date_step(message):
             user = User(telegram_id=telegram_id)
             session.add(user)
             session.commit()
-        
         new_reminder = Reminder(
             name=user_data['name'],
             description=user_data['description'],
@@ -62,9 +59,12 @@ def process_date_step(message):
         )
         session.add(new_reminder)
         session.commit()
-
-        bot.send_message(message.chat.id, "Напоминание успешно создано!")
-
+        bot.send_message(
+            message.chat.id,
+            "Напоминание успешно создано!"
+        )
     except ValueError:
-        bot.send_message(message.chat.id, "Некорректный формат даты. Пожалуйста, введите дату и время в формате 'YYYY-MM-DD HH:MM':")
-        bot.register_next_step_handler(message, process_date_step)
+        bot.send_message(
+            message.chat.id,
+            "Некорректный формат даты. Пожалуйста, введите дату и время в формате 'YYYY-MM-DD HH:MM':"
+        )
