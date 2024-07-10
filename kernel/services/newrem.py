@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from threading import Timer
 from datetime import datetime
 
 from constants import bot
@@ -65,6 +66,7 @@ def process_date_step(message):
             message.chat.id,
             "Напоминание успешно создано!"
         )
+        timer(chat_id=message.chat.id, reminder=new_reminder)
     except ValueError:
         bot.send_message(
             message.chat.id,
@@ -72,3 +74,17 @@ def process_date_step(message):
             Пожалуйста, введите дату и время форматe\
             'YYYY-MM-DD HH:MM'"
         )
+
+
+def send_reminder(chat_id, reminder: Reminder):
+        bot.send_message(
+            chat_id,
+            f"Напоминание: {reminder.name}\n\
+                Описание: {reminder.description}\n\
+                    Дата: {reminder.date}"
+        )
+
+def timer(chat_id, reminder: Reminder):
+    interval = (reminder.date - datetime.now()).total_seconds()
+    t = Timer(interval=interval, function=send_reminder, args=(chat_id, reminder))
+    t.start()
