@@ -66,6 +66,7 @@ def process_date_step(message):
             message.chat.id,
             "Напоминание успешно создано!"
         )
+        timer(chat_id=message.chat.id, reminder=new_reminder)
     except ValueError:
         bot.send_message(
             message.chat.id,
@@ -75,10 +76,15 @@ def process_date_step(message):
         )
 
 
-def send_reminder(message, Reminder: Reminder):
+def send_reminder(chat_id, reminder: Reminder):
         bot.send_message(
-            message.chat.id,
-            f"Напоминание: {Reminder.name}\n\
-            Описание: {Reminder.description}\n\
-            Дата: {Reminder.date}"
+            chat_id,
+            f"Напоминание: {reminder.name}\n\
+                Описание: {reminder.description}\n\
+                    Дата: {reminder.date}"
         )
+
+def timer(chat_id, reminder: Reminder):
+    interval = (reminder.date - datetime.now()).total_seconds()
+    t = Timer(interval=interval, function=send_reminder, args=(chat_id, reminder))
+    t.start()
