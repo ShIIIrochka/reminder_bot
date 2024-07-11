@@ -83,6 +83,8 @@ def send_reminder(chat_id, reminder: Reminder):
                 Описание: {reminder.description}\n\
                     Дата: {reminder.date}"
         )
+        session.delete(reminder)
+        session.commit()
 
 def timer(chat_id, reminder: Reminder):
     interval = (reminder.date - datetime.now()).total_seconds()
