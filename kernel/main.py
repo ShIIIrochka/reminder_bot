@@ -3,7 +3,9 @@
 from services.start import start_
 from services.newrem import newrem_command
 from constants import bot
+from services.engine_service import Base, engine
 
+Base.metadata.create_all(engine)
 
 @bot.message_handler(commands=['start'])
 def start(message):

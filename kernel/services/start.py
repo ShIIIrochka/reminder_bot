@@ -2,7 +2,7 @@
 
 from constants import bot
 from models import User
-from models.users import session
+from services.engine_service import session
 
 
 @bot.message_handler(commands=['start'])

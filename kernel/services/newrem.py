@@ -5,7 +5,7 @@ from datetime import datetime
 
 from constants import bot
 from models import Reminder, User
-from models.users import session
+from services.engine_service import session
 
 
 user_data = {}
