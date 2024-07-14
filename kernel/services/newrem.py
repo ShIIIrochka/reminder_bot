@@ -64,7 +64,7 @@ def process_date_step(message):
         session.commit()
         bot.send_message(
             message.chat.id,
-            "����апоминание успешно создано!"
+            "напоминание успешно создано!"
         )
         timer(chat_id=message.chat.id, reminder=new_reminder)
     except ValueError:
