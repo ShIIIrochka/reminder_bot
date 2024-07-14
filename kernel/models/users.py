@@ -22,7 +22,7 @@ class Reminder(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(Text(50))
     description = Column(Text)
-    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    owner_id = Column(Integer, ForeignKey('users.telegram_id'), nullable=False)
     date = Column(DateTime, nullable=False)
     owner = relationship("User", back_populates="reminders")
 
