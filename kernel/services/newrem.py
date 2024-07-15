@@ -15,6 +15,7 @@ user_data = {}
 def newrem_command(message):
     ''' функция для обработки последующих функций '''
 
+    print('вызов /newrem')
     bot.send_message(message.chat.id, "Введите название напоминания:")
     bot.register_next_step_handler(message, process_name_step)
 
@@ -47,6 +48,9 @@ def process_date_step(message):
         reminder_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
         user_data['date'] = reminder_date
 
+        if datetime.now() > reminder_date:
+            raise ValueError
+
         # Сохранение напоминания в базу данных
         telegram_id = message.from_user.id
         user = session.query(User).filter_by(telegram_id=telegram_id).first()
@@ -67,6 +71,7 @@ def process_date_step(message):
             "напоминание успешно создано!"
         )
         timer(chat_id=message.chat.id, reminder=new_reminder)
+
     except ValueError:
         bot.send_message(
             message.chat.id,
@@ -74,6 +79,7 @@ def process_date_step(message):
             Пожалуйста, введите дату и время форматe\
             'YYYY-MM-DD HH:MM'"
         )
+        bot.register_next_step_handler(message, process_date_step)
 
 
 def send_reminder(chat_id, reminder: Reminder):
