@@ -18,7 +18,7 @@ def delrem_command(message):
 
         key = types.InlineKeyboardButton(
             text=f"{result.name}",
-            callback_data='delete'
+            callback_data=f"{result.name}",
             )
 
         markup.add(key)
@@ -28,3 +28,14 @@ def delrem_command(message):
         "выбери напоминание для удаления",
         reply_markup=markup
         )
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    if call.data:
+        print(call.data)
+        reminder = select(Reminder).where(Reminder.name == call.data)
+        result = session.scalars(reminder).one()
+        session.delete(result)
+        session.commit()
+        bot.send_message(call.message.chat.id, 'напоминание удалено')

@@ -4,6 +4,7 @@ from services.start import start_
 from services.newrem import newrem_command
 from services.listrem import listrem_command
 from services.delrem import delrem_command
+from services.delrem import callback_worker
 from constants import bot
 from services.engine_service import Base, engine
 
@@ -29,6 +30,9 @@ def handle_listrem_command(message):
 def handle_delrem_command(message):
     delrem_command(message)
 
+@bot.callback_query_handler(func=lambda call: True)
+def callback(call):
+    callback_worker(call)
 
 if __name__ == "__main__":
     bot.polling(none_stop=True, interval=0)
