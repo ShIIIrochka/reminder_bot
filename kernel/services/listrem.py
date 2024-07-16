@@ -8,7 +8,7 @@ from services.engine_service import session
 
 
 @bot.message_handler(commands=['listrem'])
-def listrem(message):
+def listrem_command(message):
     '''функция получения всех напоминаний пользователя'''
 
     telegram_id = message.from_user.id
