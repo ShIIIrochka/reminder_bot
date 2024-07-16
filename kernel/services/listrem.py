@@ -24,9 +24,9 @@ def listrem_command(message):
         }
         reminder_messages.append(
             f"""
-            напоминание: {reminder_info['Name']}\n
-            описание: {reminder_info['Description']}\n
-            дата: {reminder_info['Date']}
+напоминание: {reminder_info['Name']}\n
+описание: {reminder_info['Description']}\n
+дата: {reminder_info['Date']}
             """
         )
 
