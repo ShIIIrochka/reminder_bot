@@ -30,9 +30,11 @@ def handle_listrem_command(message):
 def handle_delrem_command(message):
     delrem_command(message)
 
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     callback_worker(call)
+
 
 if __name__ == "__main__":
     bot.polling(none_stop=True, interval=0)
