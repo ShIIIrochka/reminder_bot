@@ -2,7 +2,8 @@
 
 from constants import bot
 from models import User
-from models.users import session
+from services.engine_service import session
+from services.listrem import listrem_command
 
 
 @bot.message_handler(commands=['start'])
@@ -11,7 +12,8 @@ def start_(message):
     result = session.query(User).filter(
         User.telegram_id == telegram_id).count()
     if result > 0:
-        pass
+        bot.send_message(message.from_user.id, "привет! твои напоминания:")
+        listrem_command(message)
     else:
         new_user = User(telegram_id=telegram_id)
         session.add(new_user)
