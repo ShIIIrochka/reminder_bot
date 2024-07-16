@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.orm import relationship
 from services.engine_service import Base
-
-# from services.engine_service import engine
-
-
-# Base = declarative_base()
-
 
 class User(Base):
     __tablename__ = 'users'
@@ -26,11 +19,3 @@ class Reminder(Base):
     owner_id = Column(Integer, ForeignKey('users.telegram_id'), nullable=False)
     date = Column(DateTime, nullable=False)
     owner = relationship("User", back_populates="reminders")
-
-
-# # Создание таблиц в базе данных
-# Base.metadata.create_all(engine)
-
-# # Создание сессии
-# Session = sessionmaker(bind=engine)
-# session = Session()

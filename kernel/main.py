@@ -2,10 +2,12 @@
 
 from services.start import start_
 from services.newrem import newrem_command
+from services.listrem import listrem
 from constants import bot
 from services.engine_service import Base, engine
 
 Base.metadata.create_all(engine)
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -16,6 +18,10 @@ def start(message):
 def handle_newrem_command(message):
     newrem_command(message)
 
+
+@bot.message_handler(commands=['listrem'])
+def handle_listrem_command(message):
+    listrem(message)
 
 if __name__ == "__main__":
     bot.polling(none_stop=True, interval=0)
