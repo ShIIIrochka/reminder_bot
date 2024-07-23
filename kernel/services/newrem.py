@@ -85,7 +85,7 @@ def process_date_step(message):
             date=rem_date,
             owner=user
         )
-
+        r.delete(f'name_{message.chat.id}', f'description_{message.chat.id}', f'date_{message.chat.id}')
         session.add(new_reminder)
         session.commit()
         bot.send_message(
@@ -113,6 +113,7 @@ def send_reminder(chat_id, reminder: Reminder):
     )
     session.delete(reminder)
     session.commit()
+
 
 
 def timer(chat_id, reminder: Reminder):
