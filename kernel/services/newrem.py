@@ -4,6 +4,8 @@ from threading import Timer
 from datetime import datetime
 import base64
 
+from telebot.types import Message
+
 from constants import bot
 from models import Reminder, User
 from services.engine_service import session
@@ -11,87 +13,79 @@ from services.redis_service import user_connection as r
 
 
 @bot.message_handler(commands=['newrem'])
-def newrem_command(message):
-    ''' функция для обработки последующих функций '''
+def newrem_command(message: Message) -> None:
+    """Функция для обработки команды /newrem"""
 
-    print('вызов /newrem')
     bot.send_message(message.chat.id, "Введите название напоминания:")
     bot.register_next_step_handler(message, process_name_step)
 
 
-def process_name_step(message):
-    ''' функция для обработки названия напоминания'''
+def process_name_step(message: Message) -> None:
+    """Функция для обработки названия напоминания."""
 
-    r.set(
-        name=f'name_{message.chat.id}',
-        value=message.text
-    )
+    r.set(name=f'name_{message.chat.id}', value=message.text)
 
     bot.send_message(message.chat.id, "Введите описание напоминания:")
     bot.register_next_step_handler(message, process_description_step)
 
 
-def process_description_step(message):
-    '''функция для обработки описания напоминания'''
+def process_description_step(message: Message) -> None:
+    """Функция для обработки описания напоминания"""
 
-    r.set(
-        name=f'description_{message.chat.id}',
-        value=message.text
-    )
+    r.set(name=f'description_{message.chat.id}', value=message.text)
 
     bot.send_message(
         message.chat.id,
-        "Введите дату напоминания в форматe YYYY-MM-DD HH:MM")
+        "Введите дату напоминания в формате YYYY-MM-DD HH:MM"
+    )
     bot.register_next_step_handler(message, process_date_step)
 
 
-def process_date_step(message):
-    '''функция для обработки даты напоминания'''
-
-    date_str = message.text
+def process_date_step(message: Message) -> None:
+    """Функция для обработки даты напоминания."""
+    date_str: str = message.text
 
     try:
-
-        reminder_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
+        reminder_date: datetime = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
 
         if datetime.now() > reminder_date:
             raise ValueError
 
-        date = base64.b64encode(date_str.encode())
-
-        r.set(
-            name=f'date_{message.chat.id}',
-            value=date
-        )
+        date: bytes = base64.b64encode(date_str.encode())
+        r.set(name=f'date_{message.chat.id}', value=date)
 
         # Сохранение напоминания в базу данных
-        telegram_id = message.from_user.id
-        user = session.query(User).filter_by(telegram_id=telegram_id).first()
+        telegram_id: int = message.from_user.id
+        user: User = (
+            session.query(User).filter_by(telegram_id=telegram_id).first()
+            )
 
         if not user:
             user = User(telegram_id=telegram_id)
             session.add(user)
             session.commit()
 
-        redis_date = r.get(f'date_{message.chat.id}')
-        rem_date = datetime.strptime(
-            base64.b64decode(redis_date).decode(),
-            '%Y-%m-%d %H:%M'
-            )
+        redis_date: bytes = r.get(f'date_{message.chat.id}')
+        rem_date: datetime = datetime.strptime(
+            base64.b64decode(redis_date).decode(), '%Y-%m-%d %H:%M'
+        )
 
-        new_reminder = Reminder(
+        new_reminder: Reminder = Reminder(
             name=r.get(f'name_{message.chat.id}'),
             description=r.get(f'description_{message.chat.id}'),
             date=rem_date,
             owner=user
         )
-        r.delete(f'name_{message.chat.id}', f'description_{message.chat.id}', f'date_{message.chat.id}')
+
+        r.delete(
+            f'name_{message.chat.id}',
+            f'description_{message.chat.id}',
+            f'date_{message.chat.id}'
+        )
+
         session.add(new_reminder)
         session.commit()
-        bot.send_message(
-            message.chat.id,
-            "напоминание успешно создано!"
-        )
+        bot.send_message(message.chat.id, "Напоминание успешно создано!")
         timer(chat_id=message.chat.id, reminder=new_reminder)
 
     except ValueError:
@@ -102,12 +96,12 @@ def process_date_step(message):
         bot.register_next_step_handler(message, process_date_step)
 
 
-def send_reminder(chat_id, reminder: Reminder):
+def send_reminder(chat_id: int, reminder: Reminder) -> None:
     bot.send_message(
         chat_id,
         f"""
-        Напоминание: {reminder.name}\n\
-        Описание: {reminder.description}\n\
+        Напоминание: {reminder.name}\n
+        Описание: {reminder.description}\n
         Дата: {reminder.date}
         """
     )
@@ -115,12 +109,10 @@ def send_reminder(chat_id, reminder: Reminder):
     session.commit()
 
 
-
-def timer(chat_id, reminder: Reminder):
-    interval = (reminder.date - datetime.now()).total_seconds()
-    t = Timer(
+def timer(chat_id: int, reminder: Reminder) -> None:
+    interval: float = (reminder.date - datetime.now()).total_seconds()
+    t: Timer = Timer(
         interval=interval,
         function=send_reminder,
-        args=(chat_id, reminder)
-    )
+        args=(chat_id, reminder))
     t.start()
