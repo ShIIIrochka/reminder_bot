@@ -91,7 +91,13 @@ def process_date_step(message: Message) -> None:
     except ValueError:
         bot.send_message(
             message.chat.id,
-            "Некорректный формат даты. Пожалуйста, введите дату и время формате 'YYYY-MM-DD HH:MM'"
+            """
+            Некорректный формат даты.\
+ Пожалуйста, введите дату и время в формате 'YYYY-MM-DD HH:MM'
+            """
+        )
+        r.delete(
+            f'date_{message.chat.id}'
         )
         bot.register_next_step_handler(message, process_date_step)
 
@@ -101,8 +107,8 @@ def send_reminder(chat_id: int, reminder: Reminder) -> None:
         chat_id,
         f"""
         Напоминание: {reminder.name}\n
-        Описание: {reminder.description}\n
-        Дата: {reminder.date}
+Описание: {reminder.description}\n
+Дата: {reminder.date}
         """
     )
     session.delete(reminder)
@@ -114,5 +120,6 @@ def timer(chat_id: int, reminder: Reminder) -> None:
     t: Timer = Timer(
         interval=interval,
         function=send_reminder,
-        args=(chat_id, reminder))
+        args=(chat_id, reminder)
+        )
     t.start()
