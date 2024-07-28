@@ -106,9 +106,9 @@ def send_reminder(chat_id: int, reminder: Reminder) -> None:
     bot.send_message(
         chat_id,
         f"""
-        Напоминание: {reminder.name}\n
-Описание: {reminder.description}\n
-Дата: {reminder.date}
+        *Напоминание*: {reminder.name}\n
+*Описание*: {reminder.description}\n
+*Дата*: {reminder.date}
         """
     )
     session.delete(reminder)
